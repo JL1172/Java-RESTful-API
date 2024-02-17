@@ -20,6 +20,7 @@ public class UserController {
     private static ArrayList<UserDto> userList = new ArrayList<UserDto>();
     private final AtomicLong counter = new AtomicLong();
 
+    //post request
     @PostMapping("/create-user")
     public ArrayList<UserDto> createUser(@RequestBody UserDto user) {
         if (user.getFullName() == null) {
@@ -36,11 +37,13 @@ public class UserController {
         return userList;
     }
 
+    //get request (fetches all users)
     @GetMapping("/fetch-users")
     public ArrayList<UserDto> fetchAllUsers() {
         return userList;
     }
 
+    //get by id
     @GetMapping("/fetch-user/{id}")
     public UserDto fetchUserById(@PathVariable long id) {
         UserDto userById = null;
@@ -57,6 +60,7 @@ public class UserController {
         }
     }
 
+    //put request
     @PutMapping("/update-user/{id}")
     public ArrayList<UserDto> updateUser(@PathVariable long id, @RequestBody UserDto updatedUser) {
         if (updatedUser.getFullName() == null || updatedUser.getId() == -1) {
@@ -86,6 +90,8 @@ public class UserController {
             return userList;
         }
     }
+
+    // delete request
     @DeleteMapping("/remove-user/{id}")
     public ArrayList<UserDto> removeUserWithId(@PathVariable long id) {
         List<UserDto> userIsValid = userList.stream().filter(n -> n.getId() == id).collect(Collectors.toList());
