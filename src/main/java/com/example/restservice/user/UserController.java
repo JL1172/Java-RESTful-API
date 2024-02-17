@@ -3,7 +3,9 @@ package com.example.restservice.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,11 @@ import com.example.restservice.ErrorHandling.UEntityHandler;
 
 @RestController
 public class UserController {
-    private static List<UserDto> userList = new ArrayList<UserDto>();
+    private static ArrayList<UserDto> userList = new ArrayList<UserDto>();
     private final AtomicLong counter = new AtomicLong();
 
     @PostMapping("/create-user")
-    public List<UserDto> createUser(@RequestBody UserDto user) {
+    public ArrayList<UserDto> createUser(@RequestBody UserDto user) {
         if (user.getFullName() == null) {
             throw new UEntityHandler("Full Name Required");
         } else {
@@ -35,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/fetch-users")
-    public List<UserDto> fetchAllUsers() {
+    public ArrayList<UserDto> fetchAllUsers() {
         return userList;
     }
 
@@ -56,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/update-user/{id}")
-    public List<UserDto> updateUser(@PathVariable long id, @RequestBody UserDto updatedUser) {
+    public ArrayList<UserDto> updateUser(@PathVariable long id, @RequestBody UserDto updatedUser) {
         if (updatedUser.getFullName() == null || updatedUser.getId() == -1) {
             throw new UEntityHandler("Full Name and ID Required.");
         }
@@ -80,6 +82,27 @@ public class UserController {
                         break;
                     }
                 }
+            }
+            return userList;
+        }
+    }
+    @DeleteMapping("/remove-user/{id}")
+    public ArrayList<UserDto> removeUserWithId(@PathVariable long id) {
+        List<UserDto> userIsValid = userList.stream().filter(n -> n.getId() == id).collect(Collectors.toList());
+        if (userIsValid == null) {
+            throw new UEntityHandler(String.format("User With ID %s Not Found", id));
+        } else {
+            int index = -1;
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getId() == id) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) {
+                throw new UEntityHandler("Incorrect ID.");
+            } else {
+                userList.remove(index);
             }
             return userList;
         }
