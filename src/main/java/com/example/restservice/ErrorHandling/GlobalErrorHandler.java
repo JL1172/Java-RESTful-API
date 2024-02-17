@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(UnprocessableEntityException.class)
-    public ResponseEntity<String> handleUnpResponseEntityException (UnprocessableEntityException ex) {
+public class GlobalErrorHandler {
+    @ExceptionHandler(UEntityHandler.class)
+    public ResponseEntity<String> handleUEntityClass (UEntityHandler ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
 }

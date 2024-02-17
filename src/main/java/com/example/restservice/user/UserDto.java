@@ -1,4 +1,4 @@
-package com.example.restservice.user.dto;
+package com.example.restservice.user;
 
 public class UserDto {
     private String fullName;
@@ -12,19 +12,19 @@ public class UserDto {
         this.id = id;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getFullName() {
-        return fullName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public long getId() {
+        return id;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 }
